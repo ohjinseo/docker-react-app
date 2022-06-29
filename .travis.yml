@@ -1,0 +1,18 @@
+sudo: required
+
+language: generic
+
+services:
+  - docker
+
+# 테스트 전 도커 파일로 이미지 생성
+before_install:
+  - echo "start creating an image with dockerfile"
+  - docker build -t ojs835/docker-react-app -f Dockerfile.dev .
+
+# -e CI=true : travis CI 기본 설정
+script:
+  - docker run -e CI=true ojs835/docker-react-app npm run test -- --coverage
+
+after_success:
+  - echo "Test success"
